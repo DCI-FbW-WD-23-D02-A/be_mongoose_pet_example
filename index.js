@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 import cors from 'cors';
 
 import PetController from './controller/pet.controller.js';
+import OwnerController from './controller/owner.controller.js';
 
 config();
 mongoConnect();
@@ -15,10 +16,10 @@ app.use(cors());
 app.get('/', (req, res) => {
     res.status(400).send('Hallo Welt')
 });
-// ----
 
 
 app.use('/pet', PetController);
+app.use('/owner', OwnerController);
 
 
 const PORT = 4000;

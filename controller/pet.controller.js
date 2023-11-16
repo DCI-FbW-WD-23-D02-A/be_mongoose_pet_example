@@ -7,7 +7,7 @@ import { Router } from "express";
  * Pet Liste
  */
  router.get('/', async (req, res) => {
-    const pets = await PetModel.find({});
+    const pets = await PetModel.find({}).populate('owner');
     return res.send(pets);
 });
 
@@ -84,6 +84,12 @@ router.patch('/:id', async (req, res) => {
         return res.status(400).send('Error during update');
     }
 });
+
+/**
+ * Pet Owner ändern
+ */
+ // patch('pet/:id/owner) 
+ // { owner: "123456" }
 
 
 /**

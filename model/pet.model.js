@@ -13,6 +13,14 @@ const petSchema = new Schema({
     kind: {
         type: String,
     },
+    owner: new Schema({
+        name: String,
+        address: String,
+    }),
+    favoriteMovie: new Schema({
+        name: String,
+        year: String,
+    }),
 });
 
 export const PetModel = model('Pet', petSchema);

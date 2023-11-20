@@ -7,7 +7,9 @@ import { Router } from "express";
  * Pet Liste
  */
  router.get('/', async (req, res) => {
-    const pets = await PetModel.find({}).populate('owner');
+    let pets = await PetModel.find({})
+        .select(['name', 'age'])
+        .populate('owner', ['name', 'city']);
     return res.send(pets);
 });
 

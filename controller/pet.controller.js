@@ -20,22 +20,27 @@ import { Router } from "express";
     const params = req.params;
     const kind = params.kind;
 
-    const filter = { kind: kind };
-
     const query = req.query;
     const age = query.age; // gt:4
+
+    const petsQuery = PetModel.find(); // <- ein Query object
+    petsQuery.where('kind', kind);
+
     if (age) {
-        const ageFilter = age.split(':'); // [gt, 4]
-        console.log('age query parameter', ageFilter);
+        const ageFilter = age.split(':');
         if (ageFilter.length === 2) {
-            filter.age = {};
-            filter.age['$'+ageFilter[0]] = ageFilter[1];
+            if (ageFilter[0] === 'gt') {
+                petsQuery.where('age').gt(ageFilter[1]);
+
+            } else if (ageFilter[0] === 'lt') {
+                petsQuery.where('age').lt(ageFilter[1]);
+            }
         }
     }
 
-    console.log('mongoose filter', filter);
+    petsQuery.select(['name', 'kind', 'age']);
 
-    let pets = await PetModel.find(filter);
+    const pets = await petsQuery.exec()
      // $gt: age > 4  //  $gte: age >= 4  // $lt: age < 4 // $lte:  age <= 4
     return res.send(pets);
 });

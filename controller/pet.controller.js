@@ -14,7 +14,34 @@ import { Router } from "express";
 });
 
 /**
- * Einzelnes Pet
+ * Pet Liste - gefiltert
+ */
+ router.get('/kind/:kind', async (req, res) => {
+    const params = req.params;
+    const kind = params.kind;
+
+    const filter = { kind: kind };
+
+    const query = req.query;
+    const age = query.age; // gt:4
+    if (age) {
+        const ageFilter = age.split(':'); // [gt, 4]
+        console.log('age query parameter', ageFilter);
+        if (ageFilter.length === 2) {
+            filter.age = {};
+            filter.age['$'+ageFilter[0]] = ageFilter[1];
+        }
+    }
+
+    console.log('mongoose filter', filter);
+
+    let pets = await PetModel.find(filter);
+     // $gt: age > 4  //  $gte: age >= 4  // $lt: age < 4 // $lte:  age <= 4
+    return res.send(pets);
+});
+
+/**
+ * Einzelnes Pet mit ID finden
  */
 router.get('/:id', async (req, res) => {
     const params = req.params;
@@ -27,6 +54,21 @@ router.get('/:id', async (req, res) => {
         return res.status(404).send('Pet not found');
     }
 })
+
+/**
+ * Finde ein Pet mit name
+ */
+router.get('/byName/:name', async (req, res) => {
+    const params = req.params;
+    const name = params.name;
+
+    try {
+        const pet = await PetModel.findOne({ name: name });
+        return res.send(pet);
+    } catch (err) {
+        return res.status(404).send('Pet not found');
+    }
+});
 
 /** Alle löschen */
 router.delete('/all', async (req, res) => {

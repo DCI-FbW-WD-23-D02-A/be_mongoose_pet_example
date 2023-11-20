@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import PetController from './controller/pet.controller.js';
 import OwnerController from './controller/owner.controller.js';
+import FoodController from './controller/food.controller.js';
 
 config();
 mongoConnect();
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 
 app.use('/pet', PetController);
 app.use('/owner', OwnerController);
+app.use('/food', FoodController);
 
 
 const PORT = 4000;

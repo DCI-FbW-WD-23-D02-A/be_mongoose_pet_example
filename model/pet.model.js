@@ -22,8 +22,8 @@ const petSchema = new Schema({
         year: String,
     }),
 
-    owner:  { type: Schema.Types.ObjectId, ref: 'Owner' }, // "65549e6bb0f25ba19ba1452d"
-
+    owner:  { type: Schema.Types.ObjectId, ref: 'Owner' },
+    food: [{ type: Schema.Types.ObjectId, ref: 'Food' }],
 });
 
 export const PetModel = model('Pet', petSchema);
